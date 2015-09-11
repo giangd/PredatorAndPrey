@@ -1,3 +1,4 @@
+color bgColor = color(0);
 int bubbleNum = 100;
 Bubble bob;
 Bubble[] bobs = new Bubble[bubbleNum];
@@ -13,7 +14,7 @@ void setup() {
 }   
 
 void draw() {
-  background(0, 0, 0);
+  background(0);
   bob.move();
   bob.show();
   for (int i = 0; i < bubbleNum; i++) {
@@ -33,6 +34,8 @@ class Bubble {
 
   float speed = 1.0;
   float chanceInc = 0.15;
+  
+  boolean popped = false;
 
   Bubble(float tempX, float tempY) {
     x = tempX;
@@ -40,8 +43,8 @@ class Bubble {
   }
 
   void move() {
-    upChance = 0.25;
-    downChance = 0.25;
+    upChance = 0.35;
+    downChance = 0.10;
     leftChance = 0.25;
     rightChance = 0.25;
     rand = Math.random();
@@ -55,9 +58,29 @@ class Bubble {
     } else if (rand < upChance+downChance+leftChance+rightChance) {
       x += speed;
     }
+    
+    if (y < 0-radius) {
+      y = 400+radius;  
+    }
+    if (x < 0-radius) {
+      x = 400+radius;  
+    } else if (x > width+radius) {
+      x = 0-radius;
+    }
+    
+  }
   
+  void pop() {
+    if (mousePressed) {
+      if (mouseX > x || mouseX < x+radius || mouseY > y || mouseY < y+radius) {
+        popped = true;
+      }
+    }  
   }
   void show() {
+    if (popped) {
+      fill(bgColor);  
+    }
     ellipse(x, y, radius, radius);
   }
 }  
