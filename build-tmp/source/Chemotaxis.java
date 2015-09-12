@@ -15,15 +15,16 @@ import java.io.IOException;
 public class Chemotaxis extends PApplet {
 
 //int collisionNum = 0;
+//program doesnt run in github or file
 ArrayList<Barrier> barriers = new ArrayList<Barrier>();
 
 int bgColor = color(55, 93, 129);
-int bubbleNum = 500;
+int bubbleNum = 10;
 boolean showRect = false;
 int rectW = 100; //default
 int rectH = 20;
-//int rectX = 500;
-//int rectY = 250;
+int rectX = 500;
+int rectY = 250;
 float rectR = 0;
 int rectColor = color(237, 128, 0);
 int sizeInc = 10;
@@ -34,10 +35,10 @@ int sizeInc = 10;
 //Bubble sue4;
 //Bubble sue5;
 Bubble[] bobs = new Bubble[bubbleNum];
-Barrier test;
+//Barrier test;
 public void setup() {
   size(1000, 500);
-  test = new Barrier(100, 100);
+  //test = new Barrier(100, 100);
   //bob = new Bubble(width/2, height/2);
   //sue = new Bubble(width/2+-10, height/2);
   //sue2 = new Bubble(width/2+10, height/2);
@@ -56,26 +57,26 @@ public void setup() {
 public void draw() {
   //collisions = 0;
   //println(frameRate);
-  background(bgColor);
+  background(255);
 
-  if (showRect) {
-    fill(rectColor);
-    //fill(bob.myColor);
-    rect(mouseX-rectW/2, mouseY-rectH/2, rectW, rectH);
-    //rect(rectX, rectY, rectW, rectH);
-    //rect(width/2-100,height/2,200,200);
-  }
-  for (int i = 0; i < barriers.size(); i ++) {
-    Barrier bar = barriers.get(i);
-    bar.show();
-  }
+  // if (showRect) {
+  //   fill(rectColor);
+  //   //fill(bob.myColor);
+  //   rect(mouseX-rectW/2, mouseY-rectH/2, rectW, rectH);
+  //   //rect(rectX, rectY, rectW, rectH);
+  //   //rect(width/2-100,height/2,200,200);
+  // }
+  // for (int i = 0; i < barriers.size(); i ++) {
+  //   Barrier bar = barriers.get(i);
+  //   bar.show();
+  // }
   //bob.run();
 
   for (int i = 0; i < bubbleNum; i++) {
     bobs[i].run();
   }
 
-  println(frameRate);
+  //println(frameRate);
   //println(frameCount+": "+collisions);
 }  
 
@@ -266,15 +267,15 @@ public void keyPressed() { //change rect dimensions
   } else if (key == 'r') {
     rectR += 0.1f;
   }
-  //if (key == 'a') {
-  //  rectX -= sizeInc;
-  //} else if (key == 'd') {
-  //  rectX += sizeInc;
-  //} else if (key == 'w') {
-  //  rectY -= sizeInc;
-  //} else if (key == 'd') {
-  //  rectY += sizeInc;
-  //}
+  if (key == 'a') {
+   rectX -= sizeInc;
+  } else if (key == 'd') {
+   rectX += sizeInc;
+  } else if (key == 'w') {
+   rectY -= sizeInc;
+  } else if (key == 'd') {
+   rectY += sizeInc;
+  }
   if (key == 'r') {
     for (int i = barriers.size()-1; i >= 0; i --) {
       barriers.remove(i);
@@ -371,7 +372,7 @@ public void keyPressed() { //change rect dimensions
 //   void show() {
 //     ellipse(x, y, 10, 10);
 //   }
-// }  
+// 
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Chemotaxis" };
     if (passedArgs != null) {
