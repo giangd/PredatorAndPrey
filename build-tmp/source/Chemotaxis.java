@@ -28,7 +28,7 @@ int rectY = 250;
 float rectR = 0;
 int rectColor = color(237, 128, 0);
 int sizeInc = 10;
-//Bubble bob;
+Bubble bob;
 //Bubble sue;
 //Bubble sue2;
 //Bubble sue3;
@@ -39,7 +39,7 @@ Bubble[] bobs = new Bubble[bubbleNum];
 public void setup() {
   size(1000, 500);
   //test = new Barrier(100, 100);
-  //bob = new Bubble(width/2, height/2);
+  bob = new Bubble(width/2+1, height/2);
   //sue = new Bubble(width/2+-10, height/2);
   //sue2 = new Bubble(width/2+10, height/2);
 
@@ -57,20 +57,20 @@ public void setup() {
 public void draw() {
   //collisions = 0;
   //println(frameRate);
-  background(255);
+  background(bgColor);
 
-  // if (showRect) {
-  //   fill(rectColor);
-  //   //fill(bob.myColor);
-  //   rect(mouseX-rectW/2, mouseY-rectH/2, rectW, rectH);
-  //   //rect(rectX, rectY, rectW, rectH);
-  //   //rect(width/2-100,height/2,200,200);
-  // }
+  if (showRect) {
+    fill(rectColor);
+    //fill(bob.myColor);
+    rect(mouseX-rectW/2, mouseY-rectH/2, rectW, rectH);
+    //rect(rectX, rectY, rectW, rectH);
+    //rect(width/2-100,height/2,200,200);
+  }
   // for (int i = 0; i < barriers.size(); i ++) {
   //   Barrier bar = barriers.get(i);
   //   bar.show();
   // }
-  //bob.run();
+  bob.run();
 
   // for (int i = 0; i < bubbleNum; i++) {
   //   bobs[i].run();
@@ -112,41 +112,79 @@ class Bubble {
     //check for collisions
     //idk why but checking for left and up collisions work with x-1-radius/2 but not x-radius/2 while the other ones DO work with x+radius/2
     //shouldve just used != bgColor and not have to check 4 times
-    if ((get(x-1-radius/2, y) == color(myColor) && get(x+radius/2, y) == color(myColor)) ||
-      (get(x-1-radius/2, y) == color(rectColor) && get(x+radius/2, y) == color(rectColor)) ||
-      (get(x-1-radius/2, y) == color(myColor) && get(x+radius/2, y) == color(rectColor)) ||
-      (get(x-1-radius/2, y) == color(rectColor) && get(x+radius/2, y) == color(myColor))) { //if collisions on left AND right -- kept getting bug that made bubbles sometimes get past rect
+    // if ((get(x-1-radius/2, y) == color(myColor) && get(x+radius/2, y) == color(myColor)) ||
+    //   (get(x-1-radius/2, y) == color(rectColor) && get(x+radius/2, y) == color(rectColor)) ||
+    //   (get(x-1-radius/2, y) == color(myColor) && get(x+radius/2, y) == color(rectColor)) ||
+    //   (get(x-1-radius/2, y) == color(rectColor) && get(x+radius/2, y) == color(myColor))) { //if collisions on left AND right -- kept getting bug that made bubbles sometimes get past rect
+    //   //println("LEFT&RIGHT " + frameCount);
+    //   rightChance = 0.00;
+    //   leftChance = 0.00;
+    // } else {
+    //   if ((get(x-1-radius/2, y) == color(myColor)) || (get(x-1-radius/2, y) == color(rectColor))) { //left
+    //     //collisions += 1;
+    //     //println("LEFT " + frameCount); 
+    //     rightChance = 0.50;
+    //     leftChance = 0.0;
+    //   }
+    //   if ((get(x+radius/2, y) == color(myColor)) || (get(x+radius/2, y) == color(rectColor))) { //right
+    //     //collisions += 1;
+    //     //println("RIGHT "+frameCount); 
+    //     leftChance = 0.50;
+    //     rightChance = 0.00;
+    //   }
+    // }
+    // if ((get(x, y-1-radius/2) == color(myColor) && get(x, y+radius/2) == color(myColor)) ||
+    //   (get(x, y-1-radius/2) == color(rectColor) && get(x, y+radius/2) == color(rectColor)) ||
+    //   (get(x, y-1-radius/2) == color(myColor) && get(x, y+radius/2) == color(rectColor)) ||
+    //   (get(x, y-1-radius/2) == color(rectColor) && get(x, y+radius/2) == color(myColor))) { //up AND down
+    //   //println("UP&DOWN" + frameCount); 
+    //   downChance = 0.00;
+    //   upChance = 0.00;
+    // } else {
+    //   if ((get(x, y-1-radius/2) == color(myColor))|| (get(x, y-1-radius/2) == color(rectColor))) { //up
+    //     //println("UP" + frameCount); 
+    //     //collisions += 1;
+    //     downChance = 0.50;
+    //     upChance = 0.00;
+    //   } else if ((get(x, y+radius/2) == color(myColor)) || (get(x, y+radius/2) == color(rectColor))) { //down
+    //     //println("DOWN" + frameCount); 
+    //     //collisions += 1;
+    //     upChance = 0.50;
+    //     downChance = 0.00;
+    //   }
+    // }
+
+    if ((get(x-1-radius/2, y) != color(bgColor) && get(x+radius/2, y) != color(bgColor)) ||
+      (get(x-1-radius/2, y) != color(bgColor) && get(x+radius/2, y) != color(bgColor))) { //if collisions on left AND right -- kept getting bug that made bubbles sometimes get past rect
       //println("LEFT&RIGHT " + frameCount);
       rightChance = 0.00f;
       leftChance = 0.00f;
     } else {
-      if ((get(x-radius/2, y) == color(myColor)) || (get(x-1-radius/2, y) == color(rectColor))) { //left
+      if (get(x-1-radius/2, y) != color(bgColor)) { //left
         //collisions += 1;
         //println("LEFT " + frameCount); 
         rightChance = 0.50f;
         leftChance = 0.0f;
       }
-      if ((get(x+radius/2, y) == color(myColor)) || (get(x+radius/2, y) == color(rectColor))) { //right
+      if (get(x+radius/2, y) != color(bgColor)) { //right
         //collisions += 1;
         //println("RIGHT "+frameCount); 
         leftChance = 0.50f;
         rightChance = 0.00f;
       }
     }
-    if ((get(x, y-1-radius/2) == color(myColor) && get(x, y+radius/2) == color(myColor)) ||
-      (get(x, y-1-radius/2) == color(rectColor) && get(x, y+radius/2) == color(rectColor)) ||
-      (get(x, y-1-radius/2) == color(myColor) && get(x, y+radius/2) == color(rectColor)) ||
-      (get(x, y-1-radius/2) == color(rectColor) && get(x, y+radius/2) == color(myColor))) { //up AND down
+    if ((get(x, y-1-radius/2) != color(bgColor) && get(x, y+radius/2) != color(bgColor)) ||
+      (get(x, y-1-radius/2) != color(bgColor) && get(x, y+radius/2) != color(bgColor))) { //up AND down
       //println("UP&DOWN" + frameCount); 
       downChance = 0.00f;
       upChance = 0.00f;
     } else {
-      if ((get(x, y-1-radius/2) == color(myColor))|| (get(x, y-1-radius/2) == color(rectColor))) { //up
+      if (get(x, y-1-radius/2) != color(bgColor)) { //up
         //println("UP" + frameCount); 
         //collisions += 1;
         downChance = 0.50f;
         upChance = 0.00f;
-      } else if ((get(x, y+radius/2) == color(myColor)) || (get(x, y+radius/2) == color(rectColor))) { //down
+      } else if (get(x, y+radius/2) != color(bgColor)) { //down
         //println("DOWN" + frameCount); 
         //collisions += 1;
         upChance = 0.50f;
@@ -208,14 +246,14 @@ class Bubble {
     }
   }
 
-  public void show() {
+  public void display() {
     fill(myColor);
     ellipse(x, y, radius, radius);
   }
 
   public void run() {
     if (!popped) {
-      show();
+      display();
       movement();
       pop();
     } else {
