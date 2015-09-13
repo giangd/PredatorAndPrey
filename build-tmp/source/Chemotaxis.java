@@ -16,7 +16,7 @@ public class Chemotaxis extends PApplet {
 
 //int collisionNum = 0;
 //program doesnt run in github or file and if it works its very slow
-ArrayList<Barrier> barriers = new ArrayList<Barrier>();
+//ArrayList<Barrier> barriers = new ArrayList<Barrier>();
 
 int bgColor = color(55, 93, 129);
 int bubbleNum = 10;
@@ -286,16 +286,16 @@ public void mousePressed() { //change between cursor and rect mode
     cursor();
   }
 }
-public void mouseDragged() {
-  if (mouseButton == RIGHT) {
-    barriers.add(new Barrier(mouseX, mouseY));
-    if (barriers.size() > 500) {
-      barriers.remove(0);
-    }
-    cursor();
-    showRect = false;
-  }
-}
+// void mouseDragged() {
+//   if (mouseButton == RIGHT) {
+//     barriers.add(new Barrier(mouseX, mouseY));
+//     if (barriers.size() > 500) {
+//       barriers.remove(0);
+//     }
+//     cursor();
+//     showRect = false;
+//   }
+// }
 
 public void keyPressed() { //change rect dimensions
   if (keyCode == UP) {
@@ -318,16 +318,16 @@ public void keyPressed() { //change rect dimensions
   } else if (key == 'd') {
    rectY += sizeInc;
   }
-  if (key == 'r') {
-    for (int i = barriers.size()-1; i >= 0; i --) {
-      barriers.remove(i);
-    }
-  } else if (key == 't') {
-    for (int i = 0; i < bobs.length; i++) {
-      bobs[i] = new Bubble(width/2+(int)(Math.random()*101)-50, height);
-      //bobs[i] = new Bubble((int)(Math.random()*width+1), (int)(Math.random()*height+1));
-    }
-  }
+  // if (key == 'r') {
+  //   for (int i = barriers.size()-1; i >= 0; i --) {
+  //     barriers.remove(i);
+  //   }
+  // } else if (key == 't') {
+  //   for (int i = 0; i < bobs.length; i++) {
+  //     bobs[i] = new Bubble(width/2+(int)(Math.random()*101)-50, height);
+  //     //bobs[i] = new Bubble((int)(Math.random()*width+1), (int)(Math.random()*height+1));
+  //   }
+  // }
 }
 
 
