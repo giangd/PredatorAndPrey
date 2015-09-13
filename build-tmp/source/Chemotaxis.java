@@ -15,7 +15,7 @@ import java.io.IOException;
 public class Chemotaxis extends PApplet {
 
 //int collisionNum = 0;
-//program doesnt run in github or file
+//program doesnt run in github or file and if it works its very slow
 ArrayList<Barrier> barriers = new ArrayList<Barrier>();
 
 int bgColor = color(55, 93, 129);
@@ -72,8 +72,12 @@ public void draw() {
   // }
   //bob.run();
 
-  for (int i = 0; i < bubbleNum; i++) {
-    bobs[i].run();
+  // for (int i = 0; i < bubbleNum; i++) {
+  //   bobs[i].run();
+  // }
+  for (Bubble bobBubbles: bobs) {
+    bobBubbles.run();
+    //bobs[i] = new Bubble((int)(Math.random()*width+1), (int)(Math.random()*height+1));
   }
 
   //println(frameRate);
