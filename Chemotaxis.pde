@@ -1,8 +1,10 @@
 //int collisionNum = 0;
 //program doesnt run in github or file and if it works its very slow
+//also checking using != bgColor doesnt work if the bubble goes out of the screen apparently shapes drawn outside the screen are black??
 //ArrayList<Barrier> barriers = new ArrayList<Barrier>();
 
 color bgColor = color(55, 93, 129);
+color test;
 int bubbleNum = 10;
 boolean showRect = false;
 int rectW = 100; //default
@@ -41,8 +43,12 @@ void setup() {
 void draw() {
   //collisions = 0;
   //println(frameRate);
-  background(bgColor);
-
+  //background(bgColor);
+  fill(bgColor);
+  rect(-100,-100,width*2,height*2);
+  test = get(width/2,-100);
+  fill(test);
+  rect(200,200,50,50);
   if (showRect) {
     fill(rectColor);
     //fill(bob.myColor);
@@ -63,7 +69,6 @@ void draw() {
     bobBubbles.run();
     //bobs[i] = new Bubble((int)(Math.random()*width+1), (int)(Math.random()*height+1));
   }
-
   //println(frameRate);
   //println(frameCount+": "+collisions);
 }  
@@ -88,8 +93,8 @@ class Bubble {
   }
 
   void movement() {
-    upChance = 0.35; //explained somewhere below
-    downChance = 0.15;
+    upChance = 0.40; //explained somewhere below
+    downChance = 0.10;
     leftChance = 0.25;
     rightChance = 0.25;
 
@@ -158,17 +163,18 @@ class Bubble {
       }
     }
     if ((get(x, y-1-radius/2) != color(bgColor) && get(x, y+radius/2) != color(bgColor)) ||
-      (get(x, y-1-radius/2) != color(bgColor) && get(x, y+radius/2) != color(bgColor))) { //up AND down
+      (get(x, y-1-radius/2) != color(bgColor) && get(x, y+radius/2) != color(bgColor)) ||
+      (get(x, y-1-radius/2) == color(255) && get(x, y+radius/2) != color(bgColor))) { //up AND down
       //println("UP&DOWN" + frameCount); 
       downChance = 0.00;
       upChance = 0.00;
     } else {
-      if (get(x, y-1-radius/2) != color(bgColor)) { //up
+      if (get(x, y-1-radius/2) != color(bgColor) || get(x, y-1-radius/2) == color(255)) { //up
         //println("UP" + frameCount); 
         //collisions += 1;
         downChance = 0.50;
         upChance = 0.00;
-      } else if (get(x, y+radius/2) != color(bgColor)) { //down
+      } else if (get(x, y+radius/2) != color(bgColor) || get(x, y+radius/2) == color(255)) { //down
         //println("DOWN" + frameCount); 
         //collisions += 1;
         upChance = 0.50;
@@ -191,7 +197,7 @@ class Bubble {
      */
     rand = Math.random();
     if (rand < upChance) { //think of a number line with it filling up
-      y -= speed;
+      y -= speed+1;
     } else if (rand < upChance+downChance) {
       y += speed;
     } else if (rand < upChance+downChance+leftChance) {
@@ -238,7 +244,9 @@ class Bubble {
   void run() {
     if (!popped) {
       display();
-      movement();
+      if (frameCount%2 == 0) {
+        movement();
+      }   
       pop();
     } else {
       revive();
