@@ -5,7 +5,7 @@
 ArrayList<Barrier> barriers = new ArrayList<Barrier>();
 color bgColor = color(55, 93, 129);
 color test;
-int bubbleNum = 500;
+int bubbleNum = 250;
 boolean showRect = false;
 int rectW = 100; //default
 int rectH = 20;
@@ -215,7 +215,7 @@ class Bubble {
 
   void pop() {
     if (mouseX > x-radius/2 && mouseX < x+radius/2 && mouseY > y-radius/2 && mouseY < y+radius/2) {
-      if (mousePressed) {
+      if (mousePressed && mouseButton == LEFT) {
         popped = true;
         age = frameCount;
       }
