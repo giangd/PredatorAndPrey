@@ -76,10 +76,10 @@ class Bubble {
   int speed = 1;
 
   double rand;
-  float upChance = 0.50;
-  float downChance = 0.50;
-  float leftChance = 0.50;
-  float rightChance = 0.50;
+  float upChance = 0.35;
+  float downChance = 0.10;
+  float leftChance = 0.25;
+  float rightChance = 0.25;
   boolean popped = false;
 
   Bubble(int tempX, int tempY) {
@@ -192,7 +192,7 @@ class Bubble {
      */
     rand = Math.random();
     if (rand < upChance) { //think of a number line with it filling up
-      y -= speed+1;
+      y -= speed;
     } else if (rand < upChance+downChance) {
       y += speed;
     } else if (rand < upChance+downChance+leftChance) {
@@ -310,6 +310,9 @@ void keyPressed() { //change rect dimensions
     for (int i = barriers.size()-1; i >= 0; i --) {
       barriers.remove(i);
     }
+    // for (int i = 0; i < barriers.size(); i ++) {
+    //   barriers.remove(i);
+    // }
   } else if (key == 't') {
     for (int i = 0; i < bobs.length; i++) {
       bobs[i] = new Bubble(width/2+(int)(Math.random()*101)-50, height);

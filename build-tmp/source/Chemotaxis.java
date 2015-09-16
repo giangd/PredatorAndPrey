@@ -21,7 +21,7 @@ public class Chemotaxis extends PApplet {
 ArrayList<Barrier> barriers = new ArrayList<Barrier>();
 int bgColor = color(55, 93, 129);
 int test;
-int bubbleNum = 250;
+int bubbleNum = 200;
 boolean showRect = false;
 int rectW = 100; //default
 int rectH = 20;
@@ -92,10 +92,10 @@ class Bubble {
   int speed = 1;
 
   double rand;
-  float upChance = 0.50f;
-  float downChance = 0.50f;
-  float leftChance = 0.50f;
-  float rightChance = 0.50f;
+  float upChance = 0.35f;
+  float downChance = 0.10f;
+  float leftChance = 0.25f;
+  float rightChance = 0.25f;
   boolean popped = false;
 
   Bubble(int tempX, int tempY) {
@@ -208,7 +208,7 @@ class Bubble {
      */
     rand = Math.random();
     if (rand < upChance) { //think of a number line with it filling up
-      y -= speed+1;
+      y -= speed;
     } else if (rand < upChance+downChance) {
       y += speed;
     } else if (rand < upChance+downChance+leftChance) {
@@ -293,7 +293,7 @@ public void mousePressed() { //change between cursor and rect mode
 public void mouseDragged() {
   if (mouseButton == RIGHT) {
     barriers.add(new Barrier(mouseX, mouseY));
-    if (barriers.size() > 500) {
+    if (barriers.size() > 1000) {
       barriers.remove(0);
     }
     cursor();
@@ -326,6 +326,9 @@ public void keyPressed() { //change rect dimensions
     for (int i = barriers.size()-1; i >= 0; i --) {
       barriers.remove(i);
     }
+    // for (int i = 0; i < barriers.size(); i ++) {
+    //   barriers.remove(i);
+    // }
   } else if (key == 't') {
     for (int i = 0; i < bobs.length; i++) {
       bobs[i] = new Bubble(width/2+(int)(Math.random()*101)-50, height);
