@@ -88,7 +88,7 @@ class Bubble {
   int x, y, age;
   int reviveTime = 10; //time until revives (seconds) -- its based on fps so its not accurate if you have low frames
   int radius = 30;
-  int myColor = color(196, 215, 237,100);
+  int myColor = color(196, 215, 237);
   int speed = 1;
 
   double rand;

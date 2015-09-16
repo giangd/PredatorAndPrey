@@ -5,7 +5,7 @@
 ArrayList<Barrier> barriers = new ArrayList<Barrier>();
 color bgColor = color(55, 93, 129);
 color test;
-int bubbleNum = 250;
+int bubbleNum = 200;
 boolean showRect = false;
 int rectW = 100; //default
 int rectH = 20;
