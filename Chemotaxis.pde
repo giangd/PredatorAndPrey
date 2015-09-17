@@ -45,13 +45,13 @@ void draw() {
   //println(frameRate);
   background(bgColor);
 
-  if (showRect) {
-    fill(rectColor);
-    //fill(bob.myColor);
-    rect(mouseX-rectW/2, mouseY-rectH/2, rectW, rectH);
-    //rect(rectX, rectY, rectW, rectH);
-    //rect(width/2-100,height/2,200,200);
-  }
+  // if (showRect) {
+  //   fill(rectColor);
+  //   //fill(bob.myColor);
+  //   rect(mouseX-rectW/2, mouseY-rectH/2, rectW, rectH);
+  //   //rect(rectX, rectY, rectW, rectH);
+  //   //rect(width/2-100,height/2,200,200);
+  // }
   for (int i = 0; i < barriers.size(); i ++) {
     Barrier bar = barriers.get(i);
     bar.show();
