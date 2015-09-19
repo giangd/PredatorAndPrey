@@ -355,10 +355,10 @@ public void setup() {
 public void draw() {
   background(0, 0, 0);
   bob.move();
-  bob.show();
+  bob.display();
   for (int i = 0; i < bacteriaNum; i++) {
     bobs[i].move();
-    bobs[i].show();
+    bobs[i].display();
   }
   println(frameRate);
 }  
@@ -386,23 +386,23 @@ class Bacteria {
     leftChance = 0.25f;
     rightChance = 0.25f;
 
-    // if (mouseX > 0) {
-    //   if (x < mouseX) {
-    //     rightChance += chanceInc;
-    //     leftChance -= chanceInc;
-    //   } else if (x > mouseX) {
-    //     leftChance += chanceInc;
-    //     rightChance -= chanceInc;
-    //   }
+    if (mouseX > 0) {
+      if (x < mouseX) {
+        rightChance += chanceInc;
+        leftChance -= chanceInc;
+      } else if (x > mouseX) {
+        leftChance += chanceInc;
+        rightChance -= chanceInc;
+      }
 
-    //   if (y < mouseY) {
-    //     downChance += chanceInc;
-    //     upChance -= chanceInc;
-    //   } else if (y > mouseY) {
-    //     upChance += chanceInc;
-    //     downChance -= chanceInc;
-    //   }
-    // }
+      if (y < mouseY) {
+        downChance += chanceInc;
+        upChance -= chanceInc;
+      } else if (y > mouseY) {
+        upChance += chanceInc;
+        downChance -= chanceInc;
+      }
+    }
 
     rand = Math.random();
 
@@ -427,7 +427,7 @@ class Bacteria {
     }
   }
 
-  public void show() {
+  public void display() {
     ellipse(x, y, 10, 10);
   }
 }
