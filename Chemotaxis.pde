@@ -1,106 +1,61 @@
 //int collisionNum = 0;
 //program doesnt run in github or file and if it works its very slow
-//also checking using != bgColor doesnt work if the bubble goes out of the screen apparently shapes drawn outside the screen are black??
-//pixel[] crashes program when it checks outside of screen
+//also, checking using != bgColor doesnt work if the bubble goes out of the screen -- apparently shapes drawn outside the screen are black??
+//pixel[] crashes program when it checks outside of screen or for some other reason
+
 
 ArrayList<Barrier> barriers = new ArrayList<Barrier>();
 ArrayList<Bubble> bubbles = new ArrayList<Bubble>();
 color bgColor = color(55, 93, 129);
-color test;
-int bubbleNum = 50;
-boolean showRect = false;
-int rectW = 100; //default
-int rectH = 20;
-int rectX = 500;
-int rectY = 250;
-float rectR = 0;
+
+// int bubbleNum = 50;
+
 color rectColor = color(237, 128, 0);
-int sizeInc = 10;
-Bubble bob;
-//Bubble sue;
-//Bubble sue2;
-//Bubble sue3;
-//Bubble sue4;
-//Bubble sue5;
-Bubble[] bobs = new Bubble[bubbleNum];
-int mode = 0; //make bubbles
-Barrier modelBarrier = new Barrier(-100,0);
+
+
+// Bubble[] bobs = new Bubble[bubbleNum]; //not using array instead im using the arraylist
+// int mode = 0; //0 make bubbles, 1 draw
+boolean checkForCollision = false; // not documented on the github website since it works so slow on browsers it might crash, but you can turn it on by pressing c
+// int bubbleSize = 30;
+int bubbleSizeMax2 = 60;
+int bubbleSizeMin = 20;
+int transparency = 200;
+
+
+int bubbleSizeMax = bubbleSizeMax2-bubbleSizeMin;//this is bc of the way randEvenNum is
 void setup() {
   size(1000, 500);
-  //test = new Barrier(100, 100);
-  bob = new Bubble(width/2+1, height/2);
-  //sue = new Bubble(width/2+-10, height/2);
-  //sue2 = new Bubble(width/2+10, height/2);
-
-  //sue3 = new Bubble(width/2, height/2+10);
-  //sue4 = new Bubble(width/2+-10, height/2+10);
-  //sue5 = new Bubble(width/2+10, height/2+10);
-  for (int i = 0; i < bobs.length; i++) {
-    //bobs[i] = new Bubble(width/2+(int)(Math.random()*101)-50, height-50);
-    bobs[i] = new Bubble(width/2+(int)(Math.random()*101)-50,height);
-    //bobs[i] = new Bubble((int)(Math.random()*width+1), (int)(Math.random()*height+1));
-  }
-  // frameRate(60);
   noStroke();
 }   
 
 void draw() {
-  //collisions = 0;
-  //println(frameRate);
   background(bgColor);
-
-  // if (showRect) {
-  //   fill(rectColor);
-  //   //fill(bob.myColor);
-  //   rect(mouseX-rectW/2, mouseY-rectH/2, rectW, rectH);
-  //   //rect(rectX, rectY, rectW, rectH);
-  //   //rect(width/2-100,height/2,200,200);
+  
+  // for (int i = 0; i < barriers.size(); i ++) {
+  //   Barrier bar = barriers.get(i);
+  //   bar.show();
   // }
-  
-  
-  for (int i = 0; i < barriers.size(); i ++) {
-    Barrier bar = barriers.get(i);
-    bar.show();
-  }
   
   for (int i = 0; i < bubbles.size(); i ++) {
     Bubble bub = bubbles.get(i);
     bub.run();
   }
-
-  // bob.run();
-
-  // for (int i = 0; i < bubbleNum; i++) {
-  //   //loadPixels();
-  //   bobs[i].run();
-  //   //bobs[i].display();
-  // }
-
-  //println(frameRate);
-  // for (Bubble bobBubbles: bobs) {
-  //   bobBubbles.run();
-  // }
-  //println(frameRate);
-  //println(frameCount+": "+collisions);
-  if (mode == 1) {
-    stroke(100,50,50);
-    fill(rectColor);
-    ellipse(mouseX,mouseY,modelBarrier.radius,modelBarrier.radius);
-    noStroke();
-  }
-  if (mousePressed && mouseButton == RIGHT) {
-    if (mode == 0) {
-      bubbles.add(new Bubble(mouseX,mouseY));
-    }
-  }
 }  
+
+int randEvenNum() {
+  int randEvenNum = (int)(Math.random()*bubbleSizeMax+1)+bubbleSizeMin;
+  while(randEvenNum % 2 != 0) {
+    randEvenNum = (int)(Math.random()*bubbleSizeMax+1)+bubbleSizeMin;
+  }
+  return randEvenNum;
+}
 
 class Bubble {
   int x, y, age;
   int reviveTime = 10; //time until revives (seconds) -- its based on fps so its not accurate if you have low frames
-  color myColor = color(196, 215, 237);
+  color myColor = color(196, 215, 237, transparency);
   int speed = 1;
-  int radius = 40; //has to be even
+  int radius; //has to be even
 
   double rand;
   float upChance;
@@ -113,158 +68,59 @@ class Bubble {
   boolean leftCollision;
   boolean rightCollision;
   
-  Bubble(int tempX, int tempY) {
+  Bubble(int tempX, int tempY, int tempRadius) {
     x = tempX;
     y = tempY;
+    radius = tempRadius;
   }
 
   void movement() {
-    
-    //check for collisions
-    //idk why but checking for left and up collisions work with x-1-radius/2 but not x-radius/2 while the other ones DO work with x+radius/2
-    //shouldve just used != bgColor and not have to check 4 times --but then they wouldnt go oustide screen and loop around 
-    // if ((get(x-1-radius/2, y) == color(myColor) && get(x+radius/2, y) == color(myColor)) ||
-    //   (get(x-1-radius/2, y) == color(rectColor) && get(x+radius/2, y) == color(rectColor)) ||
-    //   (get(x-1-radius/2, y) == color(myColor) && get(x+radius/2, y) == color(rectColor)) ||
-    //   (get(x-1-radius/2, y) == color(rectColor) && get(x+radius/2, y) == color(myColor))) { //if collisions on left AND right -- kept getting bug that made bubbles sometimes get past rect
-    //   //println("LEFT&RIGHT " + frameCount);
-    //   rightChance = 0.00;
-    //   leftChance = 0.00;
-    // } else {
-    //   if ((get(x-1-radius/2, y) == color(myColor)) || (get(x-1-radius/2, y) == color(rectColor))) { //left
-    //     //collisions += 1;
-    //     //println("LEFT " + frameCount); 
-    //     rightChance = 0.50;
-    //     leftChance = 0.0;
-    //   }
-    //   if ((get(x+radius/2, y) == color(myColor)) || (get(x+radius/2, y) == color(rectColor))) { //right
-    //     //collisions += 1;
-    //     //println("RIGHT "+frameCount); 
-    //     leftChance = 0.50;
-    //     rightChance = 0.00;
-    //   }
-    // }
-    // if ((get(x, y-1-radius/2) == color(myColor) && get(x, y+radius/2) == color(myColor)) ||
-    //   (get(x, y-1-radius/2) == color(rectColor) && get(x, y+radius/2) == color(rectColor)) ||
-    //   (get(x, y-1-radius/2) == color(myColor) && get(x, y+radius/2) == color(rectColor)) ||
-    //   (get(x, y-1-radius/2) == color(rectColor) && get(x, y+radius/2) == color(myColor))) { //up AND down
-    //   //println("UP&DOWN" + frameCount); 
-    //   downChance = 0.00;
-    //   upChance = 0.00;
-    // } else {
-    //   if ((get(x, y-1-radius/2) == color(myColor))|| (get(x, y-1-radius/2) == color(rectColor))) { //up
-    //     //println("UP" + frameCount); 
-    //     //collisions += 1;
-    //     downChance = 0.50;
-    //     upChance = 0.00;
-    //   } else if ((get(x, y+radius/2) == color(myColor)) || (get(x, y+radius/2) == color(rectColor))) { //down
-    //     //println("DOWN" + frameCount); 
-    //     //collisions += 1;
-    //     upChance = 0.50;
-    //     downChance = 0.00;
-    //   }
-    // }
 
-    // if ((get(x-1-radius/2, y) != color(bgColor) && get(x+radius/2, y) != color(bgColor)) ||
-    //   (get(x-1-radius/2, y) != color(bgColor) && get(x+radius/2, y) != color(bgColor))) { //if collisions on left AND right -- kept getting bug that made bubbles sometimes get past rect
-    //   //println("LEFT&RIGHT " + frameCount);
-    //   rightChance = 0.00;
-    //   leftChance = 0.00;
-    // } else {
-    //   if (get(x-1-radius/2, y) != color(bgColor)) { //left
-    //     //collisions += 1;
-    //     //println("LEFT " + frameCount); 
-    //     rightChance = 0.50;
-    //     leftChance = 0.0;
-    //   }
-    //   if (get(x+radius/2, y) != color(bgColor)) { //right
-    //     //collisions += 1;
-    //     //println("RIGHT "+frameCount); 
-    //     leftChance = 0.50;
-    //     rightChance = 0.00;
-    //   }
-    // }
-    // if ((get(x, y-1-radius/2) != color(bgColor) && get(x, y+radius/2) != color(bgColor)) ||
-    //   (get(x, y-1-radius/2) == color(255) && get(x, y+radius/2) != color(bgColor))) { //up AND down
-    //   //println("UP&DOWN" + frameCount); 
-    //   downChance = 0.00;
-    //   upChance = 0.00;
-    // } else {
-    //   if (get(x, y-1-radius/2) != color(bgColor) || get(x, y-1-radius/2) == color(255)) { //up
-    //     //println("UP" + frameCount); 
-    //     //collisions += 1;
-    //     downChance = 0.50;
-    //     upChance = 0.00;
-    //   } else if (get(x, y+radius/2) != color(bgColor) || get(x, y+radius/2) == color(255)) { //down
-    //     //println("DOWN" + frameCount); 
-    //     //collisions += 1;
-    //     upChance = 0.50;
-    //     downChance = 0.00;
-    //   }
-    // }
-    //                    cant use pixels[] bc program crashes when it checks outside of screen 
-    // pixels[y*width+x]
-    
-    // if (leftCollision || rightCollision) {
-    //   if (leftCollision && rightCollision) {
-    //     rightChance = 0.00;
-    //     leftChance = 0.00;
-    //   } else if (leftCollision) {
-    //     rightChance = 0.50;
-    //     leftChance = 0.0;
-    //   } else if (rightCollision) {
-    //     leftChance = 0.50;
-    //     rightChance = 0.00;
-    //   }
-    // } else {
-    //   leftChance = 0.25;
-    //   rightChance = 0.25;
-    // }
-    
-    // downCollision = pixels[(y+radius/2)*width+x] != color(bgColor);
-    // upCollision = pixels[(y-1-radius/2)*width+x] != color(bgColor);
-    // leftCollision = pixels[y*width+(x-1-radius/2)]  != color(bgColor);
-    // rightCollision = pixels[y*width+(x+radius/2)] != color(bgColor);
-
-    downCollision = get(x,y+radius/2) != color(bgColor);
-    upCollision = get(x,y-1-radius/2) != color(bgColor);
-    leftCollision = get(x-1-radius/2, y) != color(bgColor);
-    rightCollision = get(x+radius/2, y) != color(bgColor);
-
-    if (leftCollision || rightCollision) {
-      if (leftCollision && rightCollision) {
-        //println(frameCount + " LEFT&RIGHT");
-        rightChance = 0.00;
-        leftChance = 0.00;
-      } else if (rightCollision) {
-        //println(frameCount + " RIGHT");
-        leftChance = 0.50;
-        rightChance = 0.00;
+    if (checkForCollision) {
+      downCollision = get(x,y+radius/2) != color(bgColor);
+      upCollision = get(x,y-1-radius/2) != color(bgColor);
+      leftCollision = get(x-1-radius/2, y) != color(bgColor);
+      rightCollision = get(x+radius/2, y) != color(bgColor);
+      if (leftCollision || rightCollision) {
+        if (leftCollision && rightCollision) {
+          //println(frameCount + " LEFT&RIGHT");
+          rightChance = 0.00;
+          leftChance = 0.00;
+        } else if (rightCollision) {
+          //println(frameCount + " RIGHT");
+          leftChance = 0.50;
+          rightChance = 0.00;
+        } else {
+          //println(frameCount + " LEFT");
+          rightChance = 0.50;
+          leftChance = 0.00;
+        }
       } else {
-        //println(frameCount + " LEFT");
-        rightChance = 0.50;
-        leftChance = 0.00;
+        leftChance = 0.25; 
+        rightChance = 0.25;
+      }
+      
+      if (upCollision || downCollision) {
+        if (upCollision && downCollision) {
+          //println(frameCount + " P&DOWN");
+          upChance = 0.00;
+          downChance = 0.00;
+        } else if (downCollision) {
+          //println(frameCount + " DOWN");
+          upChance = 0.50;
+          downChance = 0.0;
+        } else {
+          //println(frameCount + " UP");
+          downChance = 0.50;
+          upChance = 0.00;
+        }
+      }  else {
+        upChance = 0.40;
+        downChance = 0.10;
       }
     } else {
-      leftChance = 0.25;
+      leftChance = 0.25; 
       rightChance = 0.25;
-    }
-    
-    if (upCollision || downCollision) {
-      if (upCollision && downCollision) {
-        //println(frameCount + " P&DOWN");
-        upChance = 0.00;
-        downChance = 0.00;
-      } else if (downCollision) {
-        //println(frameCount + " DOWN");
-        upChance = 0.50;
-        downChance = 0.0;
-      } else {
-        //println(frameCount + " UP");
-        downChance = 0.50;
-        upChance = 0.00;
-      }
-    }  else {
       upChance = 0.40;
       downChance = 0.10;
     }
@@ -280,15 +136,18 @@ class Bubble {
       x += speed;
     }
 
-    if (y < 0-radius) { //loop around screen
-      y = height+radius/2;
-    } else if (y > height+radius) {
-      y = 0-radius/2;
+    if (y < 0+radius/2) { 
+      //y = height+radius/2;
+      y = 0+radius/2;
+    } else if (y > height-radius/2) {
+      y = height-radius/2;
     }
-    if (x < 0-radius) {
-      x = width+radius/2;
-    } else if (x > width+radius) {
-      x = 0-radius/2;
+    if (x < 0+radius/2) {
+      // x = width+radius/2;
+      x = 0+radius/2;
+    } else if (x > width-radius/2) {
+      // x = 0-radius/2;
+      x = width-radius/2;
     }
   }
 
@@ -311,6 +170,7 @@ class Bubble {
   }
 
   void display() {
+    //radius = bubbleSize;
     fill(myColor);
     ellipse(x, y, radius, radius);
   }
@@ -341,7 +201,7 @@ class Barrier {
   }
 }
 
-void mousePressed() { //change between cursor and rect mode
+// void mousePressed() { //change between cursor and rect mode
   // if (mouseButton == RIGHT) {
   //   // showRect = true;
   //   // noCursor();
@@ -350,34 +210,38 @@ void mousePressed() { //change between cursor and rect mode
   //   // showRect = false;
   //   // cursor();
   // }
-  
-}
+//}
+
 void mouseDragged() {
   if (mouseButton == RIGHT) {
-    if (mode == 0) {
-      bubbles.add(new Bubble(mouseX,mouseY));
-    } else {
-      barriers.add(new Barrier(mouseX, mouseY));
-      if (barriers.size() > 500) {
-        barriers.remove(0);
-      }
-      showRect = false;
-    }
-  } 
+    bubbles.add(new Bubble(mouseX,mouseY,randEvenNum()));
+  }
+  //   if (mode == 0) {
+  //     bubbles.add(new Bubble(mouseX,mouseY));
+
+
+  //   } else {
+  //     barriers.add(new Barrier(mouseX, mouseY));
+  //     if (barriers.size() > 500) {
+  //       barriers.remove(0);
+  //     }
+  //     showRect = false;
+  //   }
+  // } 
 }
 
 void keyPressed() { //change rect dimensions
-  if (keyCode == UP) {
-    rectH = constrain(rectH+=sizeInc, 5, height);
-  } else if (keyCode == DOWN) {
-    rectH = constrain(rectH-=sizeInc, 5, height);
-  } else if (keyCode == LEFT) {
-    rectW = constrain(rectW-=sizeInc, 5, width);
-  } else if (keyCode == RIGHT) {
-    rectW = constrain(rectW+=sizeInc, 5, width);
-  } else if (key == 'r') {
-    rectR += 0.1;
-  }
+  // if (keyCode == UP) {
+  //   rectH = constrain(rectH+=sizeInc, 5, height);
+  // } else if (keyCode == DOWN) {
+  //   rectH = constrain(rectH-=sizeInc, 5, height);
+  // } else if (keyCode == LEFT) {
+  //   rectW = constrain(rectW-=sizeInc, 5, width);
+  // } else if (keyCode == RIGHT) {
+  //   rectW = constrain(rectW+=sizeInc, 5, width);
+  // } else if (key == 'r') {
+  //   rectR += 0.1;
+  // }
   // if (key == 'a') {
   //  rectX -= sizeInc;
   // } else if (key == 'd') {
@@ -387,27 +251,40 @@ void keyPressed() { //change rect dimensions
   // } else if (key == 'd') {
   //  rectY += sizeInc;
   // }
+  // if (keyCode == UP) {
+  //   bubbleSize = constrain(bubbleSize+=2, 2, height);
+  // } else if (keyCode == DOWN) {
+  //   bubbleSize = constrain(bubbleSize-=2, 2, height);
+  // }
+  // if (key == 'r') {
+  //   for (int i = barriers.size()-1; i >= 0; i --) {
+  //     barriers.remove(i);
+  //   }
+  //   // for (int i = 0; i < barriers.size(); i ++) {
+  //   //   barriers.remove(i);
+  //   // }
+  // } else
   if (key == 'r') {
-    for (int i = barriers.size()-1; i >= 0; i --) {
-      barriers.remove(i);
-    }
-    // for (int i = 0; i < barriers.size(); i ++) {
-    //   barriers.remove(i);
-    // }
-  } else if (key == 't') {
     for (int i = bubbles.size()-1; i >= 0; i --) {
       bubbles.remove(i);
     }
-  }  else if (key == 'd') {
-    if (mode == 1) {
-      mode = 0;
+  } else if (key == 'c') {
+    if (checkForCollision) {
+      checkForCollision = false;
     } else {
-      mode = 1;
+      checkForCollision = true;
     }
   }
 
-} 
+  // else if (key == 'd' ) {
+  //   if (mode == 1) {
+  //     mode = 0;
+  //   } else {
+  //     mode = 1;
+  //   }
+  // }
 
+} 
 
 // int bacteriaNum = 1000;
 // Bacteria bob;
