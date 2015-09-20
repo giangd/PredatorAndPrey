@@ -92,7 +92,7 @@ public void draw() {
   //   //bobs[i].display();
   // }
 
-  //println(frameRate);
+  println(frameRate);
   // for (Bubble bobBubbles: bobs) {
   //   bobBubbles.run();
   // }
@@ -111,7 +111,7 @@ class Bubble {
   int reviveTime = 10; //time until revives (seconds) -- its based on fps so its not accurate if you have low frames
   int myColor = color(196, 215, 237);
   int speed = 1;
-  int radius = 30;
+  int radius = 40; //has to be even
 
   double rand;
   float upChance;
@@ -133,7 +133,7 @@ class Bubble {
     
     //check for collisions
     //idk why but checking for left and up collisions work with x-1-radius/2 but not x-radius/2 while the other ones DO work with x+radius/2
-    //shouldve just used != bgColor and not have to check 4 times --but then they wouldnt go oustide screen and loop around
+    //shouldve just used != bgColor and not have to check 4 times --but then they wouldnt go oustide screen and loop around 
     // if ((get(x-1-radius/2, y) == color(myColor) && get(x+radius/2, y) == color(myColor)) ||
     //   (get(x-1-radius/2, y) == color(rectColor) && get(x+radius/2, y) == color(rectColor)) ||
     //   (get(x-1-radius/2, y) == color(myColor) && get(x+radius/2, y) == color(rectColor)) ||
@@ -215,10 +215,7 @@ class Bubble {
     // }
     //                    cant use pixels[] bc program crashes when it checks outside of screen 
     // pixels[y*width+x]
-    // downCollision = pixels[(y+radius/2)*width+x] != color(bgColor);
-    // upCollision = pixels[(y-1-radius/2)*width+x] != color(bgColor);
-    // leftCollision = pixels[y*width+(x-1-radius/2)]  != color(bgColor);
-    // rightCollision = pixels[y*width+(x+radius/2)] != color(bgColor);
+    
     // if (leftCollision || rightCollision) {
     //   if (leftCollision && rightCollision) {
     //     rightChance = 0.00;
@@ -235,6 +232,11 @@ class Bubble {
     //   rightChance = 0.25;
     // }
     
+    // downCollision = pixels[(y+radius/2)*width+x] != color(bgColor);
+    // upCollision = pixels[(y-1-radius/2)*width+x] != color(bgColor);
+    // leftCollision = pixels[y*width+(x-1-radius/2)]  != color(bgColor);
+    // rightCollision = pixels[y*width+(x+radius/2)] != color(bgColor);
+
     downCollision = get(x,y+radius/2) != color(bgColor);
     upCollision = get(x,y-1-radius/2) != color(bgColor);
     leftCollision = get(x-1-radius/2, y) != color(bgColor);
@@ -350,16 +352,19 @@ class Barrier {
   }
 }
 
-// void mousePressed() { //change between cursor and rect mode
-//   if (mouseButton == RIGHT) {
-//     // showRect = true;
-//     // noCursor();
-//     bubbles.add(new Bubble(mouseX,mouseY));
-//   } else if (mouseButton == LEFT) {
-//     // showRect = false;
-//     // cursor();
-//   }
-// }
+public void mousePressed() { //change between cursor and rect mode
+  // if (mouseButton == RIGHT) {
+  //   // showRect = true;
+  //   // noCursor();
+  //   bubbles.add(new Bubble(mouseX,mouseY));
+  // } else if (mouseButton == LEFT) {
+  //   // showRect = false;
+  //   // cursor();
+  // }
+  if (mode == 0) {
+      bubbles.add(new Bubble(mouseX,mouseY));
+  }
+}
 public void mouseDragged() {
   if (mouseButton == RIGHT) {
     if (mode == 0) {
