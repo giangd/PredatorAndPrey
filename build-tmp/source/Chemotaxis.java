@@ -20,6 +20,7 @@ public class Chemotaxis extends PApplet {
 //pixel[] crashes program when it checks outside of screen
 
 ArrayList<Barrier> barriers = new ArrayList<Barrier>();
+ArrayList<Bubble> bubbles = new ArrayList<Bubble>();
 int bgColor = color(55, 93, 129);
 int test;
 int bubbleNum = 50;
@@ -38,7 +39,8 @@ Bubble bob;
 //Bubble sue4;
 //Bubble sue5;
 Bubble[] bobs = new Bubble[bubbleNum];
-//Barrier test;
+int mode = 0; //make bubbles
+Barrier modelBarrier = new Barrier(-100,0);
 public void setup() {
   size(1000, 500);
   //test = new Barrier(100, 100);
@@ -63,26 +65,32 @@ public void draw() {
   //println(frameRate);
   background(bgColor);
 
-  if (showRect) {
-    fill(rectColor);
-    //fill(bob.myColor);
-    rect(mouseX-rectW/2, mouseY-rectH/2, rectW, rectH);
-    //rect(rectX, rectY, rectW, rectH);
-    //rect(width/2-100,height/2,200,200);
-  }
-
+  // if (showRect) {
+  //   fill(rectColor);
+  //   //fill(bob.myColor);
+  //   rect(mouseX-rectW/2, mouseY-rectH/2, rectW, rectH);
+  //   //rect(rectX, rectY, rectW, rectH);
+  //   //rect(width/2-100,height/2,200,200);
+  // }
+  
+  
   for (int i = 0; i < barriers.size(); i ++) {
     Barrier bar = barriers.get(i);
     bar.show();
   }
   
-  bob.run();
-
-  for (int i = 0; i < bubbleNum; i++) {
-    //loadPixels();
-    bobs[i].run();
-    //bobs[i].display();
+  for (int i = 0; i < bubbles.size(); i ++) {
+    Bubble bub = bubbles.get(i);
+    bub.run();
   }
+
+  // bob.run();
+
+  // for (int i = 0; i < bubbleNum; i++) {
+  //   //loadPixels();
+  //   bobs[i].run();
+  //   //bobs[i].display();
+  // }
 
   //println(frameRate);
   // for (Bubble bobBubbles: bobs) {
@@ -90,6 +98,12 @@ public void draw() {
   // }
   //println(frameRate);
   //println(frameCount+": "+collisions);
+  if (mode == 1) {
+    stroke(100,50,50);
+    fill(rectColor);
+    ellipse(mouseX,mouseY,modelBarrier.radius,modelBarrier.radius);
+    noStroke();
+  }
 }  
 
 class Bubble {
@@ -297,7 +311,7 @@ class Bubble {
   }
 
   public void revive() {
-    if (frameCount > age + 30*reviveTime) {
+    if (frameCount > age + 60*reviveTime) {
       popped = false;
       //x = (int)(Math.random()*width+1);
       x = width/2;
@@ -316,7 +330,7 @@ class Bubble {
       movement();
       pop();
     } else {
-      revive();
+      //revive();
     }
   }
 }
@@ -336,25 +350,28 @@ class Barrier {
   }
 }
 
-public void mousePressed() { //change between cursor and rect mode
-  if (mouseButton == RIGHT) {
-    showRect = true;
-
-    noCursor();
-  } else if (mouseButton == LEFT) {
-    showRect = false;
-    cursor();
-  }
-}
+// void mousePressed() { //change between cursor and rect mode
+//   if (mouseButton == RIGHT) {
+//     // showRect = true;
+//     // noCursor();
+//     bubbles.add(new Bubble(mouseX,mouseY));
+//   } else if (mouseButton == LEFT) {
+//     // showRect = false;
+//     // cursor();
+//   }
+// }
 public void mouseDragged() {
   if (mouseButton == RIGHT) {
-    barriers.add(new Barrier(mouseX, mouseY));
-    if (barriers.size() > 500) {
-      barriers.remove(0);
+    if (mode == 0) {
+      bubbles.add(new Bubble(mouseX,mouseY));
+    } else {
+      barriers.add(new Barrier(mouseX, mouseY));
+      if (barriers.size() > 500) {
+        barriers.remove(0);
+      }
+      showRect = false;
     }
-    cursor();
-    showRect = false;
-  }
+  } 
 }
 
 public void keyPressed() { //change rect dimensions
@@ -369,15 +386,15 @@ public void keyPressed() { //change rect dimensions
   } else if (key == 'r') {
     rectR += 0.1f;
   }
-  if (key == 'a') {
-   rectX -= sizeInc;
-  } else if (key == 'd') {
-   rectX += sizeInc;
-  } else if (key == 'w') {
-   rectY -= sizeInc;
-  } else if (key == 'd') {
-   rectY += sizeInc;
-  }
+  // if (key == 'a') {
+  //  rectX -= sizeInc;
+  // } else if (key == 'd') {
+  //  rectX += sizeInc;
+  // } else if (key == 'w') {
+  //  rectY -= sizeInc;
+  // } else if (key == 'd') {
+  //  rectY += sizeInc;
+  // }
   if (key == 'r') {
     for (int i = barriers.size()-1; i >= 0; i --) {
       barriers.remove(i);
@@ -386,15 +403,18 @@ public void keyPressed() { //change rect dimensions
     //   barriers.remove(i);
     // }
   } else if (key == 't') {
-    for (int i = 0; i < bobs.length; i++) {
-      // bobs[i].x = (int)(Math.random()*width);
-      bobs[i].x = width/2;
-      bobs[i].y = height;
-      //bobs[i] = new Bubble(width/2+(int)(Math.random()*101)-50, height);
-      //bobs[i] = new Bubble((int)(Math.random()*width+1), (int)(Math.random()*height+1));
+    for (int i = bubbles.size()-1; i >= 0; i --) {
+      bubbles.remove(i);
+    }
+  }  else if (key == 'd') {
+    if (mode == 1) {
+      mode = 0;
+    } else {
+      mode = 1;
     }
   }
-}
+
+} 
 
 
 // int bacteriaNum = 1000;
