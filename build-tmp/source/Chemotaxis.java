@@ -22,7 +22,7 @@ public class Chemotaxis extends PApplet {
 ArrayList<Barrier> barriers = new ArrayList<Barrier>();
 int bgColor = color(55, 93, 129);
 int test;
-int bubbleNum = 100;
+int bubbleNum = 50;
 boolean showRect = false;
 int rectW = 100; //default
 int rectH = 20;
