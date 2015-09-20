@@ -76,7 +76,7 @@ void draw() {
   //   //bobs[i].display();
   // }
 
-  println(frameRate);
+  //println(frameRate);
   // for (Bubble bobBubbles: bobs) {
   //   bobBubbles.run();
   // }
@@ -87,6 +87,11 @@ void draw() {
     fill(rectColor);
     ellipse(mouseX,mouseY,modelBarrier.radius,modelBarrier.radius);
     noStroke();
+  }
+  if (mousePressed && mouseButton == RIGHT) {
+    if (mode == 0) {
+      bubbles.add(new Bubble(mouseX,mouseY));
+    }
   }
 }  
 
@@ -345,9 +350,7 @@ void mousePressed() { //change between cursor and rect mode
   //   // showRect = false;
   //   // cursor();
   // }
-  if (mode == 0) {
-      bubbles.add(new Bubble(mouseX,mouseY));
-  }
+  
 }
 void mouseDragged() {
   if (mouseButton == RIGHT) {
