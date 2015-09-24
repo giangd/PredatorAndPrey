@@ -1,7 +1,7 @@
 Predator pred = new Predator(width/2, height/2, 20);
 Prey[] prey = new Prey[50];
 void setup() {
-  size(500, 500); 
+  size(1000, 800); 
   noStroke();
   for (int i = 0; i < prey.length; i ++) {
     prey[i] = new Prey((int)random(width), (int)random(height), (int)random(pred.size-pred.size/2, pred.size+20));
@@ -25,7 +25,15 @@ void keyPressed() {
     pred.right = true;
   } else if (keyCode == LEFT) {
     pred.left = true;
-  }
+  } else if (key == 'w') {
+    pred.up = true;
+  } else if (key == 's') {
+    pred.down = true;
+  } else if (key == 'd') {
+    pred.right = true;
+  } else if (key == 'a') {
+    pred.left = true;
+  } 
 }
 
 void keyReleased() {
@@ -44,7 +52,15 @@ void keyReleased() {
       prey[i].dead = false;
       pred.size = 20;
     }
-  }
+  } else if (key == 'w') {
+    pred.up = false;
+  } else if (key == 's') {
+    pred.down = false;
+  } else if (key == 'd') {
+    pred.right = false;
+  } else if (key == 'a') {
+    pred.left = false;
+  } 
 }
 
 class Predator {
