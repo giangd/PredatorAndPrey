@@ -1,26 +1,19 @@
-Predator pred = new Predator();
+Predator pred = new Predator(width/2, height/2, 20);
 Prey[] prey = new Prey[50];
 void setup() {
   size(500, 500); 
   noStroke();
   for (int i = 0; i < prey.length; i ++) {
-    prey[i] = new Prey((int)random(width), (int)random(height), (int)random(5, 50));
+    prey[i] = new Prey((int)random(width), (int)random(height), (int)random(pred.size-pred.size/2, pred.size+20));
   }
 }
 
 void draw() {
   background(0);
-  pred.move();
-  pred.display();
   for (int i = 0; i < prey.length; i ++) {
-    if (prey[i].dead == false) {
-      prey[i].display();
-      prey[i].die();
-    }
+      prey[i].run();
   }
-  if (pred.size > 10 && (frameCount%60 == 0)) {
-    pred.size -= pred.size*0.01;
-  }
+  pred.run();
 }
 
 void keyPressed() {
@@ -51,10 +44,13 @@ class Predator {
   int x = 250;
   int y = 250;
   boolean up, down, right, left;
-  int size = 10;
-  int speed = 3;
+  float size = 60;
+  int speed = 2;
 
-  Predator() {
+  Predator(int tempX, int tempY, float tempSize) {
+    x = tempX;
+    y = tempY;
+    size = tempSize;
   }
 
   void move() {
@@ -82,13 +78,28 @@ class Predator {
     fill(255, 0, 0);
     ellipse(x, y, size, size);
   }
+
+  void shrink() {
+    if (size > 10) {
+      size -= size*0.001;
+    }
+  }
+
+  void run() {
+    move();
+    shrink();
+    display();
+  }
 }
 
 class Prey {
   int x;
   int y;
-  int size;
+  float size;
   boolean dead = false;
+  int age;
+  int reviveTime = 5;
+  int sizeRange = 40;
 
   Prey(int tempX, int tempY, int tempSize) {
     x = tempX;
@@ -98,15 +109,33 @@ class Prey {
 
   void die() {
     if (size < pred.size) {
-      if (dist(x, y, pred.x, pred.y) <= size/2+pred.size/2) {
+      if (dist(x, y, pred.x, pred.y) <=  pred.size/2-size/2) {
         dead = true;
+        age = frameCount;
         pred.size += 5;
       }
+    }
+  }
+  
+  void revive() {
+    if (frameCount > age+reviveTime*60) {
+      x = (int)random(width);
+      y = (int)random(height);
+      size = (int)random(pred.size-sizeRange,pred.size-sizeRange);
     }
   }
 
   void display() {
     fill(0, 255, 0);
     ellipse(x, y, size, size);
+  }
+
+  void run() {
+    if (!dead) {
+      display();
+      die();
+    } else {
+     revive(); 
+    }
   }
 }
