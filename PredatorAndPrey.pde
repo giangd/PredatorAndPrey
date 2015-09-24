@@ -37,6 +37,13 @@ void keyReleased() {
     pred.right = false;
   } else if (keyCode == LEFT) {
     pred.left = false;
+  } else if (key == 'r') {
+    for (int i = 0; i < prey.length; i ++) {
+      // prey[i] = new Prey((int)random(width), (int)random(height), (int)random(pred.size-pred.size/2, pred.size+20));
+      prey[i] = new Prey((int)random(width), (int)random(height), (int)random(10,50));
+      prey[i].dead = false;
+      pred.size = 20;
+    }
   }
 }
 
@@ -80,8 +87,8 @@ class Predator {
   }
 
   void shrink() {
-    if (size > 10) {
-      size -= size*0.001;
+    if (size > 20) {
+      size -= size*0.002;
     }
   }
 
@@ -121,7 +128,8 @@ class Prey {
     if (frameCount > age+reviveTime*60) {
       x = (int)random(width);
       y = (int)random(height);
-      size = (int)random(pred.size-sizeRange,pred.size-sizeRange);
+      size = (int)random(10,50);
+      dead = false;
     }
   }
 
@@ -135,7 +143,7 @@ class Prey {
       display();
       die();
     } else {
-     revive(); 
+      revive(); 
     }
   }
 }
