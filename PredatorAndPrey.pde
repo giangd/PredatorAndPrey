@@ -4,7 +4,7 @@ void setup() {
   size(1000, 1000); 
   noStroke();
   for (int i = 0; i < prey.length; i ++) {
-    prey[i] = new Prey((int)random(width), (int)random(height), (int)random(pred.size-pred.size/2, pred.size+20));
+    prey[i] = new Prey((int)random(width), (int)random(height), (int)random(5, pred.size+20));
   }
 }
 
@@ -48,7 +48,7 @@ void keyReleased() {
   } else if (key == 'r') {
     for (int i = 0; i < prey.length; i ++) {
       // prey[i] = new Prey((int)random(width), (int)random(height), (int)random(pred.size-pred.size/2, pred.size+20));
-      prey[i] = new Prey((int)random(width), (int)random(height), (int)random(10,50));
+      prey[i] = new Prey((int)random(width), (int)random(height), (int)random(5,50));
       prey[i].dead = false;
       pred.size = 20;
     }
@@ -144,7 +144,7 @@ class Prey {
     if (frameCount > age+reviveTime*60) {
       x = (int)random(width);
       y = (int)random(height);
-      size = (int)random(10,50);
+      size = (int)random(5,50);
       dead = false;
     }
   }
