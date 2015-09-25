@@ -1,7 +1,7 @@
 Predator pred = new Predator(width/2, height/2, 20);
-Prey[] prey = new Prey[200];
+Prey[] prey = new Prey[500];
 void setup() {
-  size(1000, 1000); 
+  size(1500, 1000); 
   noStroke();
   for (int i = 0; i < prey.length; i ++) {
     prey[i] = new Prey((int)random(width), (int)random(height), (int)random(5, pred.size+20));
@@ -104,7 +104,7 @@ class Predator {
 
   void shrink() {
     if (size > 20) {
-      size -= size*0.002;
+      size -= size*0.005;
     }
   }
 
