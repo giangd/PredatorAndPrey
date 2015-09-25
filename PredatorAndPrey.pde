@@ -104,7 +104,7 @@ class Predator {
 
   void shrink() {
     if (size > 20) {
-      size -= size*0.005;
+      size -= size*0.004;
     }
   }
 
