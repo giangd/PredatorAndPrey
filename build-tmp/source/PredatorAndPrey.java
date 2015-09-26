@@ -14,14 +14,23 @@ import java.io.IOException;
 
 public class PredatorAndPrey extends PApplet {
 
-Predator pred = new Predator(width/2, height/2, 20);
-Prey[] prey = new Prey[50];
+int startSize = 15;
+Predator pred = new Predator(width/2, height/2, 1000);
+Prey[] prey = new Prey[200];
 public void setup() {
-  size(500, 500); 
+  size(800, 500); 
   noStroke();
   for (int i = 0; i < prey.length; i ++) {
-    prey[i] = new Prey((int)random(width), (int)random(height), (int)random(pred.size-pred.size/2, pred.size+20));
+    prey[i] = new Prey((int)random(width), (int)random(height), (int)random(5, 40));
   }
+  // for (int i = 0; i < prey.length; i ++) {
+  //   prey.display();
+  //   while (get(x,y) == myColor) {
+  //     prey.x = (int)random(width);
+  //     prey.y = (int)random(height);
+  //   }
+  // }
+  
 }
 
 public void draw() {
@@ -41,7 +50,15 @@ public void keyPressed() {
     pred.right = true;
   } else if (keyCode == LEFT) {
     pred.left = true;
-  }
+  } else if (key == 'w') {
+    pred.up = true;
+  } else if (key == 's') {
+    pred.down = true;
+  } else if (key == 'd') {
+    pred.right = true;
+  } else if (key == 'a') {
+    pred.left = true;
+  } 
 }
 
 public void keyReleased() {
@@ -56,19 +73,27 @@ public void keyReleased() {
   } else if (key == 'r') {
     for (int i = 0; i < prey.length; i ++) {
       // prey[i] = new Prey((int)random(width), (int)random(height), (int)random(pred.size-pred.size/2, pred.size+20));
-      prey[i] = new Prey((int)random(width), (int)random(height), (int)random(10,50));
+      prey[i] = new Prey((int)random(width), (int)random(height), (int)random(5,50));
       prey[i].dead = false;
-      pred.size = 20;
+      pred.size = 10;
     }
-  }
+  } else if (key == 'w') {
+    pred.up = false;
+  } else if (key == 's') {
+    pred.down = false;
+  } else if (key == 'd') {
+    pred.right = false;
+  } else if (key == 'a') {
+    pred.left = false;
+  } 
 }
 
 class Predator {
-  int x = 250;
-  int y = 250;
+  float x = 250;
+  float y = 250;
   boolean up, down, right, left;
   float size = 60;
-  int speed = 2;
+  float speed = 1.5f;
 
   Predator(int tempX, int tempY, float tempSize) {
     x = tempX;
@@ -103,9 +128,9 @@ class Predator {
   }
 
   public void shrink() {
-    if (size > 20) {
-      size -= size*0.002f;
-    }
+    if (size < startSize*2 && size > startSize) {
+      size -= size*0.0018f;
+    } 
   }
 
   public void run() {
@@ -116,13 +141,13 @@ class Predator {
 }
 
 class Prey {
-  int x;
-  int y;
+  float x, y;
   float size;
   boolean dead = false;
   int age;
   int reviveTime = 5;
   int sizeRange = 40;
+  int myColor = color(0,255,0);
 
   Prey(int tempX, int tempY, int tempSize) {
     x = tempX;
@@ -131,12 +156,10 @@ class Prey {
   }
 
   public void die() {
-    if (size < pred.size) {
-      if (dist(x, y, pred.x, pred.y) <=  pred.size/2-size/2) {
-        dead = true;
-        age = frameCount;
-        pred.size += 5;
-      }
+    if (size <= pred.size && dist(x, y, pred.x, pred.y) <=  pred.size/2) {
+      dead = true;
+      age = frameCount;
+      pred.size += size/5;
     }
   }
   
@@ -144,13 +167,13 @@ class Prey {
     if (frameCount > age+reviveTime*60) {
       x = (int)random(width);
       y = (int)random(height);
-      size = (int)random(10,50);
+      size = (int)random(5,50);
       dead = false;
     }
   }
 
   public void display() {
-    fill(0, 255, 0);
+    fill(myColor);
     ellipse(x, y, size, size);
   }
 

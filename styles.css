@@ -2,17 +2,17 @@ body {
     background-color: rgb(50,85,117);
     color: rgb(172,240,242);
     font-family: "Open Sans", sans-serif;
-    text-align: center;
-}
+    text-align: center;}
 
 #content {
     display: block;
+    margin-top: auto;
     margin-left: auto;
     margin-right: auto;
 }
 
 header {
-	
+	font-size: 70%;
 }
 
 footer {

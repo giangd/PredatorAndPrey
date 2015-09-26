@@ -1,11 +1,20 @@
-Predator pred = new Predator(width/2, height/2, 20);
-Prey[] prey = new Prey[500];
+int startSize = 15;
+Predator pred = new Predator(width/2, height/2, startSize);
+Prey[] prey = new Prey[200];
 void setup() {
-  size(1500, 1000); 
+  size(800, 500); 
   noStroke();
   for (int i = 0; i < prey.length; i ++) {
-    prey[i] = new Prey((int)random(width), (int)random(height), (int)random(5, pred.size+20));
+    prey[i] = new Prey((int)random(width), (int)random(height), (int)random(5, 40));
   }
+  // for (int i = 0; i < prey.length; i ++) {
+  //   prey.display();
+  //   while (get(x,y) == myColor) {
+  //     prey.x = (int)random(width);
+  //     prey.y = (int)random(height);
+  //   }
+  // }
+  
 }
 
 void draw() {
@@ -50,7 +59,7 @@ void keyReleased() {
       // prey[i] = new Prey((int)random(width), (int)random(height), (int)random(pred.size-pred.size/2, pred.size+20));
       prey[i] = new Prey((int)random(width), (int)random(height), (int)random(5,50));
       prey[i].dead = false;
-      pred.size = 20;
+      pred.size = 10;
     }
   } else if (key == 'w') {
     pred.up = false;
@@ -64,11 +73,11 @@ void keyReleased() {
 }
 
 class Predator {
-  int x = 250;
-  int y = 250;
+  float x = 250;
+  float y = 250;
   boolean up, down, right, left;
   float size = 60;
-  int speed = 2;
+  float speed = 1.5;
 
   Predator(int tempX, int tempY, float tempSize) {
     x = tempX;
@@ -103,8 +112,18 @@ class Predator {
   }
 
   void shrink() {
-    if (size > 20) {
-      size -= size*0.004;
+    if (size < startSize*2 && size > startSize) {
+      size -= size*0.0018;
+    } else if (size > startSize*3) {
+        size -= size*0.0054;
+    } else if (size > startSize*4) {
+        size -= size*0.06;
+    } else if (size > startSize*5) {
+        size -= size*0.1;
+    } else if (size > startSize*10) {
+        size -= size*0.25;
+    } else if (size > height) {
+        size -= size*5;
     }
   }
 
@@ -116,13 +135,13 @@ class Predator {
 }
 
 class Prey {
-  int x;
-  int y;
+  float x, y;
   float size;
   boolean dead = false;
   int age;
   int reviveTime = 5;
   int sizeRange = 40;
+  color myColor = color(0,255,0);
 
   Prey(int tempX, int tempY, int tempSize) {
     x = tempX;
@@ -131,12 +150,10 @@ class Prey {
   }
 
   void die() {
-    if (size < pred.size) {
-      if (dist(x, y, pred.x, pred.y) <=  pred.size/2-size/2) {
-        dead = true;
-        age = frameCount;
-        pred.size += 5;
-      }
+    if (size <= pred.size && dist(x, y, pred.x, pred.y) <=  pred.size/2) {
+      dead = true;
+      age = frameCount;
+      pred.size += size/5;
     }
   }
   
@@ -150,7 +167,7 @@ class Prey {
   }
 
   void display() {
-    fill(0, 255, 0);
+    fill(myColor);
     ellipse(x, y, size, size);
   }
 
