@@ -15,7 +15,7 @@ import java.io.IOException;
 public class PredatorAndPrey extends PApplet {
 
 int startSize = 15;
-Predator pred = new Predator(width/2, height/2, 1000);
+Predator pred = new Predator(width/2, height/2, startSize);
 Prey[] prey = new Prey[200];
 public void setup() {
   size(800, 500); 
@@ -128,9 +128,21 @@ class Predator {
   }
 
   public void shrink() {
-    if (size < startSize*2 && size > startSize) {
+    if (size > startSize) {
       size -= size*0.0018f;
-    } 
+    }
+    if (size > startSize*3) {
+        size -= size*0.0005f;
+    }
+    if (size > startSize*4) {
+        size -= size*0.0007f;
+    }
+    if (size > startSize*5) {
+        size -= size*0.001f;
+    }
+    if (size > startSize*10) {
+        size -= size*0.01f;
+    }
   }
 
   public void run() {

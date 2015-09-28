@@ -112,18 +112,20 @@ class Predator {
   }
 
   void shrink() {
-    if (size < startSize*2 && size > startSize) {
+    if (size > startSize) {
       size -= size*0.0018;
-    } else if (size > startSize*3) {
-        size -= size*0.0054;
-    } else if (size > startSize*4) {
-        size -= size*0.06;
-    } else if (size > startSize*5) {
-        size -= size*0.1;
-    } else if (size > startSize*10) {
-        size -= size*0.25;
-    } else if (size > height) {
-        size -= size*5;
+    }
+    if (size > startSize*3) {
+        size -= size*0.0005;
+    }
+    if (size > startSize*4) {
+        size -= size*0.0007;
+    }
+    if (size > startSize*5) {
+        size -= size*0.001;
+    }
+    if (size > startSize*10) {
+        size -= size*0.01;
     }
   }
 
