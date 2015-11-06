@@ -124,7 +124,7 @@ class Predator {
     if (size > startSize*5) {
         size -= size*0.001;
     }
-    if (size > startSize*10) {
+    if (size > startSize*50) {
         size -= size*0.9;
     }
   }
