@@ -132,16 +132,16 @@ class Predator {
       size -= size*0.0018f;
     }
     if (size > startSize*3) {
-        size -= size*0.0005f;
+        size -= size*0.0001f;
     }
     if (size > startSize*4) {
-        size -= size*0.0007f;
+        size -= size*0.0003f;
     }
     if (size > startSize*5) {
         size -= size*0.001f;
     }
     if (size > startSize*10) {
-        size -= size*0.01f;
+        size -= size*1;
     }
   }
 
