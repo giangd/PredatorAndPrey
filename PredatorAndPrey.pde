@@ -1,5 +1,6 @@
 int startSize = 15;
-Predator pred = new Predator(width/2, height/2, startSize);
+Predator pred = new Predator(790, 250, startSize, color(0,0,255));
+Predator pred2 = new Predator(10, 250, startSize, color(255,0,0));
 Prey[] prey = new Prey[200];
 void setup() {
   size(800, 500); 
@@ -18,11 +19,13 @@ void setup() {
 }
 
 void draw() {
-  background(0);
+  background(100);
   for (int i = 0; i < prey.length; i ++) {
       prey[i].run();
   }
   pred.run();
+  pred2.run();
+  die();
 }
 
 void keyPressed() {
@@ -35,13 +38,13 @@ void keyPressed() {
   } else if (keyCode == LEFT) {
     pred.left = true;
   } else if (key == 'w') {
-    pred.up = true;
+    pred2.up = true;
   } else if (key == 's') {
-    pred.down = true;
+    pred2.down = true;
   } else if (key == 'd') {
-    pred.right = true;
+    pred2.right = true;
   } else if (key == 'a') {
-    pred.left = true;
+    pred2.left = true;
   } 
 }
 
@@ -62,13 +65,13 @@ void keyReleased() {
       pred.size = 10;
     }
   } else if (key == 'w') {
-    pred.up = false;
+    pred2.up = false;
   } else if (key == 's') {
-    pred.down = false;
+    pred2.down = false;
   } else if (key == 'd') {
-    pred.right = false;
+    pred2.right = false;
   } else if (key == 'a') {
-    pred.left = false;
+    pred2.left = false;
   } 
 }
 
@@ -76,13 +79,20 @@ class Predator {
   float x = 250;
   float y = 250;
   boolean up, down, right, left;
-  float size = 60;
+  float size = 15;
   float speed = 1.5;
+  color myColor;
+  color deadColor = color(200);
+  color currentColor = myColor;
+  boolean dead = false, changeBack = false;
+  float timeDied;
 
-  Predator(int tempX, int tempY, float tempSize) {
+  Predator(int tempX, int tempY, float tempSize, color tempMyColor) {
     x = tempX;
     y = tempY;
     size = tempSize;
+    myColor = tempMyColor;
+    currentColor = myColor;
   }
 
   void move() {
@@ -105,9 +115,26 @@ class Predator {
       }
     }
   }
+  
+  void decSize() {
+    this.speed = (20/this.size)+1.5;  
+  }
+  
+  void respawn() {
+    if (this.dead) {
+      x = width/2;
+      y = height/2;
+      this.currentColor = this.deadColor;
+      this.dead = false;
+      this.changeBack = true;
+    } else if (this.changeBack && frameCount > this.timeDied+250) {
+      this.currentColor = this.myColor;
+      this.changeBack = false;
+    }
+  }
 
   void display() {
-    fill(255, 0, 0);
+    fill(currentColor);
     ellipse(x, y, size, size);
   }
 
@@ -128,11 +155,13 @@ class Predator {
         size -= size*0.9;
     }
   }
-
+  
   void run() {
     move();
     shrink();
     display();
+    decSize();
+    respawn();
   }
 }
 
@@ -156,6 +185,11 @@ class Prey {
       dead = true;
       age = frameCount;
       pred.size += size/5;
+    }
+    if (size <= pred2.size && dist(x, y, pred2.x, pred2.y) <=  pred2.size/2) {
+      dead = true;
+      age = frameCount;
+      pred2.size += size/5;
     }
   }
   
@@ -181,4 +215,23 @@ class Prey {
       revive(); 
     }
   }
+}
+
+void die() {
+  //pred is blue
+  //pred2 is red
+  if (!pred.changeBack && pred.size < pred2.size && dist(pred.x, pred.y, pred2.x, pred2.y) <=  pred2.size/2) {
+   pred.dead = true;  
+   pred.timeDied = frameCount;
+  }
+  if (!pred2.changeBack && pred2.size < pred.size && dist(pred2.x, pred2.y, pred.x, pred.y) <=  pred.size/2) {
+   pred2.dead = true;
+   pred2.timeDied = frameCount;
+  }
+  //if (pred.dead) {
+  //  print("blue is dead"); 
+  //}
+  //if (pred2.dead) {
+  //  print("red is dead"); 
+  //}
 }
